@@ -34,9 +34,9 @@
  * @uses lang_api.php
  */
 
-if( !defined( 'BUGNOTE_ADD_INC_ALLOW' ) ) {
+ if( !defined( 'BUGNOTE_ADD_INC_ALLOW' ) ) {
 	return;
-}
+} 
 
 require_api( 'access_api.php' );
 require_api( 'bug_api.php' );
@@ -66,7 +66,7 @@ require_api( 'lang_api.php' );
 <form id="bugnoteadd" method="post" action="bugnote_add.php" enctype="multipart/form-data" class="dz dropzone-form">
 	<?php echo form_security_field( 'bugnote_add' ) ?>
 	<input type="hidden" name="bug_id" value="<?php echo $f_bug_id ?>" />
-	<div id="bugnote_add" class="widget-box widget-color-blue2 <?php echo $t_block_css ?>">
+	<div id="bugnote_add" class="widget-box widget-color-blue2" <?php echo $t_block_css ?>">
 		<div class="widget-header widget-header-small">
 			<h4 class="widget-title lighter">
 				<i class="ace-icon fa fa-comment"></i>
@@ -90,7 +90,7 @@ require_api( 'lang_api.php' );
 					<?php echo lang_get( 'bugnote' ) ?>
 				</th>
 				<td width="85%">
-					<textarea name="bugnote_text" class="form-control" rows="7"></textarea>
+					<textarea id="tmp_bugnote" name="bugnote_text" class="form-control" rows="7"></textarea>
 				</td>
 			</tr>
 
@@ -189,6 +189,26 @@ require_api( 'lang_api.php' );
 </div>
 </form>
 </div>
+<script>
+var users = [
+  {username: 'lodev09', fullname: 'Jovanni Lo'},
+  {username: 'foo', fullname: 'Foo User'},
+  {username: 'bar', fullname: 'Bar User'},
+  {username: 'twbs', fullname: 'Twitter Bootstrap'},
+  {username: 'john', fullname: 'John Doe'},
+  {username: 'jane', fullname: 'Jane Doe'},
+];
+$('#tmp_bugnote').suggest('@', {
+  data: users,
+  map: function(user) {
+    return {
+      value: user.username,
+      text: '<strong>'+user.username+'</strong> <small>'+user.fullname+'</small>'
+    }
+  }
+})
+</script>
 <?php
 	include_once( dirname( __FILE__ ) . '/fileupload_inc.php' );
 }
+

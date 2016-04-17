@@ -294,7 +294,7 @@ $t_block_icon = $t_collapse_block ? 'fa-chevron-down' : 'fa-chevron-up';
 		</div>
 	</td>
 	<td class="bugnote-note">
-		<?php
+		<?php 
 			switch ( $t_bugnote->note_type ) {
 				case REMINDER:
 					echo '<strong>';

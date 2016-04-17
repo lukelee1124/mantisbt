@@ -4718,3 +4718,9 @@ $g_webservice_error_when_version_not_found = ON;
  */
 $g_webservice_version_when_not_found = '';
 
+/**
+ * If ON mention support will be enabled
+ *
+ * @global integer $g_mention_enabled
+ */
+$g_mention_enabled = ON;

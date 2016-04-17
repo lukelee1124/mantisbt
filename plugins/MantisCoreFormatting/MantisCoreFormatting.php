@@ -121,6 +121,13 @@ class MantisCoreFormattingPlugin extends MantisFormattingPlugin {
 			$t_string = string_process_bug_link( $t_string );
 			$t_string = string_process_bugnote_link( $t_string );
 		}
+		
+		if( ON == config_get( 'mention_enabled' ) ) {
+			if( !is_callable( 'mention_format_text' ) ) {
+				require_api( 'mention_api.php' );
+			}
+			$t_string = mention_format_text( $t_string );
+		}
 
 		return $t_string;
 	}
@@ -167,25 +174,26 @@ class MantisCoreFormattingPlugin extends MantisFormattingPlugin {
 	 * @param string $p_string Unformatted text.
 	 * @return string Formatted text
 	 */
-	function email( $p_event, $p_string ) {
-		static $s_text, $s_buglinks;
+ 	function email( $p_event, $p_string ) {
+ 		static $s_text, $s_buglinks;
 
-		$t_string = $p_string;
+ 		$t_string = $p_string;
 
-		if( null === $s_text ) {
+ 		if( null === $s_text ) {
 			$s_text = plugin_config_get( 'process_text' );
 			$s_buglinks = plugin_config_get( 'process_buglinks' );
-		}
+ 		}
 
 		if( ON == $s_text ) {
 			$t_string = string_strip_hrefs( $t_string );
 		}
 
 		if( ON == $s_buglinks ) {
-			$t_string = string_process_bug_link( $t_string, false );
+ 			$t_string = string_process_bug_link( $t_string, false );
 			$t_string = string_process_bugnote_link( $t_string, false );
-		}
+ 		}
 
 		return $t_string;
-	}
+} 
+
 }

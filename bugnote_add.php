@@ -50,6 +50,7 @@ require_api( 'gpc_api.php' );
 require_api( 'helper_api.php' );
 require_api( 'lang_api.php' );
 require_api( 'print_api.php' );
+require_api( 'mention_api.php' );
 
 form_security_validate( 'bugnote_add' );
 
@@ -88,7 +89,17 @@ if( $f_files !== null ) {
 
 # We always set the note time to BUGNOTE, and the API will overwrite it with TIME_TRACKING
 # if $f_time_tracking is not 0 and the time tracking feature is enabled.
-$t_bugnote_id = bugnote_add( $t_bug->id, $f_bugnote_text, $f_time_tracking, $f_private, BUGNOTE );
+if( mention_users( $f_bugnote_text ) ) {
+	$f_bugnote_text = mention_format_text_save( $f_bugnote_text );
+	$t_bugnote_id = bugnote_add( $t_bug->id, $f_bugnote_text, $f_time_tracking, $f_private, BUGNOTE );
+	
+	email_bugnote_add( $t_bug->id );
+} else {
+	$f_bugnote_text = mention_format_text_save( $f_bugnote_text );
+	$t_bugnote_id = bugnote_add( $t_bug->id, $f_bugnote_text, $f_time_tracking, $f_private, BUGNOTE );
+}
+
+//$t_bugnote_id = bugnote_add( $t_bug->id, $f_bugnote_text, $f_time_tracking, $f_private, BUGNOTE );
 if( !$t_bugnote_id ) {
 	error_parameters( lang_get( 'bugnote' ) );
 	trigger_error( ERROR_EMPTY_FIELD, ERROR );
