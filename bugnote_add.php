@@ -90,13 +90,18 @@ if( $f_files !== null ) {
 # We always set the note time to BUGNOTE, and the API will overwrite it with TIME_TRACKING
 # if $f_time_tracking is not 0 and the time tracking feature is enabled.
 if( mention_users( $f_bugnote_text ) ) {
+	$t_mentioned_users = mention_users( $f_bugnote_text );
 	$f_bugnote_text = mention_format_text_save( $f_bugnote_text );
 	$t_bugnote_id = bugnote_add( $t_bug->id, $f_bugnote_text, $f_time_tracking, $f_private, BUGNOTE );
+	$e_bugnote_text=mention_format_text( $f_bugnote_text );
+	foreach( $t_mentioned_users as $e_mentioned_users ) {
 	
-	email_bugnote_add( $t_bug->id );
+	email_bug_reminder( $e_mentioned_users, $f_bug_id, $e_bugnote_text );
+	}
+
 } else {
-	$f_bugnote_text = mention_format_text_save( $f_bugnote_text );
-	$t_bugnote_id = bugnote_add( $t_bug->id, $f_bugnote_text, $f_time_tracking, $f_private, BUGNOTE );
+ 	$f_bugnote_text = mention_format_text_save( $f_bugnote_text );
+ 	$t_bugnote_id = bugnote_add( $t_bug->id, $f_bugnote_text, $f_time_tracking, $f_private, BUGNOTE );
 }
 
 //$t_bugnote_id = bugnote_add( $t_bug->id, $f_bugnote_text, $f_time_tracking, $f_private, BUGNOTE );
