@@ -121,6 +121,13 @@ class MantisCoreFormattingPlugin extends MantisFormattingPlugin {
 			$t_string = string_process_bug_link( $t_string );
 			$t_string = string_process_bugnote_link( $t_string );
 		}
+		
+		if( ON == config_get( 'mention_enabled' ) ) {
+			if( !is_callable( 'mention_format_text' ) ) {
+				require_api( 'mention_api.php' );
+			}
+			$t_string = mention_format_text( $t_string );
+		}
 
 		return $t_string;
 	}

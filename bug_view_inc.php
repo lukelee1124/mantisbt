@@ -79,6 +79,8 @@ require_api( 'utility_api.php' );
 require_api( 'version_api.php' );
 
 require_css( 'status_config.php' );
+require_css( 'bootstrap-suggest.css' );
+require_js( 'bootstrap-suggest.js' );
 
 $f_bug_id = gpc_get_int( 'id' );
 
