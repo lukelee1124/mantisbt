@@ -1,6 +1,6 @@
 <?php
 function mention_format_text( $t_text ) {
-	preg_match_all( "/@{U[0-9]+}/", $t_text, $t_matches );
+	preg_match_all( "/(?<!@)@{U[0-9]+}/", $t_text, $t_matches );
 
 	if( !empty( $t_matches[0] ) ) {
 		$t_matched_mentions = $t_matches[0];
@@ -36,7 +36,7 @@ function mention_format_text( $t_text ) {
 }
 
 function mention_users( $t_text ) {
-	preg_match_all( "/@[A-Za-z0-9]+/", $t_text, $t_matches );
+	preg_match_all( "/(?<!@)@[A-Za-z0-9]+/", $t_text, $t_matches );
 	$t_mentioned_users = array();
 	
 	if( !empty( $t_matches[0] )) {
@@ -57,7 +57,7 @@ function mention_users( $t_text ) {
 }
 
 function mention_format_text_save( $t_text ) {
-	preg_match_all( "/@[A-Za-z0-9]+/", $t_text, $t_matches );
+	preg_match_all( "/(?<!@)@[A-Za-z0-9]+/", $t_text, $t_matches );
 
 	if( !empty( $t_matches[0] )) {
 		$t_matched_mentions = $t_matches[0];

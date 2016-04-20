@@ -1267,11 +1267,16 @@ function email_bug_reminder( $p_recipients, $p_bug_id, $p_message ) {
 		);
 	}
 
+	$t_bug = bug_get( $p_bug_id, true );
 	$t_project_id = bug_get_field( $p_bug_id, 'project_id' );
 	$t_sender_id = auth_get_current_user_id();
 	$t_sender = user_get_name( $t_sender_id );
-
-	$t_subject = email_build_subject( $p_bug_id );
+	$t_sender_url = '<a class="user" href="' . string_get_bug_view_url_with_fqdn( $p_bug_id ) . '">' . $t_sender . '</a>';
+	$t_summary = bug_format_summary( $p_bug_id, SUMMARY_FIELD );
+	$t_summary_url = '<a class="user" href="' . string_get_bug_view_url_with_fqdn( $p_bug_id ) . '">' . $t_summary . '</a>';
+	$t_description = string_display_links( $t_bug->description );
+	$t_subject = $t_sender . lang_get( 'mentioned_you_on_issue' ) . $p_bug_id;
+    $t_add_comment_url = '<a class="user" href="' . string_get_bug_view_url_with_fqdn( $p_bug_id ) . '">' . lang_get( 'add_comment' ) . '</a>';
 	$t_date = date( config_get( 'normal_date_format' ) );
 
 	$t_result = array();
@@ -1285,8 +1290,11 @@ function email_bug_reminder( $p_recipients, $p_bug_id, $p_message ) {
 		} else {
 			$t_sender_email = '';
 		}
-		$t_header = "\n" . lang_get( 'on_date' ) . ' ' . $t_date . ', ' . $t_sender . ' ' . $t_sender_email . lang_get( 'sent_you_this_reminder_about' ) . ': ' . "\n\n";
-		$t_contents = $t_header . string_get_bug_view_url_with_fqdn( $p_bug_id ) . " \n\n" . $p_message;
+
+		$t_header = "\n" . $t_sender_url . ' ' . lang_get( 'mentioned_you_on' ) . ' ' . $t_summary_url;
+		$t_header .= "\n\n" . lang_get( 'Re' ) . $t_description;
+		$t_footer = "\n\n" . $t_add_comment_url ;
+		$t_contents = $t_header . " \n\n " . $p_message . $t_footer;
 
 		$t_id = email_store( $t_email, $t_subject, $t_contents );
 		if( $t_id !== null ) {
